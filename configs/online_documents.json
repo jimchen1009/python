@@ -1,0 +1,74 @@
+{
+	"物品产出来源": {
+		"typeId": 1,
+		"title":  ["产出ID", "描述"],
+		"expression": "new GetApproach\\((?P<id>\\d+), \"(?P<name>\\w+)\"\\)",
+		"filename":  "C:/ProjectG/pjg-common/src/main/java/com/bt/pjg/common/material/GetApproach.java"
+	},
+	"物品消耗来源": {
+		"typeId": 1,
+		"title":  ["产出ID", "描述"],
+		"expression": "new DecReason\\((?P<id>\\d+), \"(?P<name>\\w+)\"\\)",
+		"filename":  "C:/ProjectG/pjg-common/src/main/java/com/bt/pjg/common/material/DecReason.java"
+	},
+	"货币": {
+		"typeId": 2,
+		"title":  ["id", "name", "icon", "desc", "recover_time", "recover_num", "recover_limit", "max_limit", "expiredTime"],
+		"sheetname": "export_currency",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/item.xlsx"
+	},
+	"食魂id": {
+		"typeId": 2,
+		"title":  ["id", "name"],
+		"sheetname": "export_角色",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/hero.xlsx"
+	},
+	"关卡": {
+		"typeId": 2,
+		"title":  ["barrierId", "title", "cost"],
+		"sheetname": "export_关卡配置",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/fb.xlsx"
+	},
+	"活动bossID": {
+		"typeId": 2,
+		"title":  ["id", "name"],
+		"sheetname": "export_活动BOSS",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/activity_boss.xlsx"
+	},
+	"活动副本类型": {
+		"typeId": 2,
+		"title":  ["dungeonType", "name"],
+		"sheetname": "export_活动章节类型",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/fbActivity.xlsx"
+	},
+	"活动关卡": {
+		"typeId": 2,
+		"title":  ["barrierId", "title", "cost"],
+		"sheetname": "export_活动关卡",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/fbActivity.xlsx"
+	},
+	"BP任务": {
+		"typeId": 2,
+		"title":  ["activityId", "id", "name", "desc"],
+		"sheetname": "export_161任务",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/activity161.xlsx"
+	},
+	"菜谱（食物）": {
+		"typeId": 2,
+		"title":  ["id", "name"],
+		"sheetname": "export_cookbook",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/cookbook.xlsx"
+	},
+	"活动": {
+		"typeId": 2,
+		"title":  ["id", "name", "typeId", "typeName", "openState", "startTime", "endTime"],
+		"sheetname": "export_活动配置",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/activity.xlsx"
+	},
+	"故事": {
+		"typeId": 2,
+		"title":  ["id", "chapterName", "storyName"],
+		"sheetname": "export_story",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/story.xlsx"
+	}
+}
