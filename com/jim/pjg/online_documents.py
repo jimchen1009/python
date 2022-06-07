@@ -113,7 +113,7 @@ if __name__ == '__main__':
     parser.add_argument('--qq', dest="qq", default='771129369', type=str, help='QQ账号')
     parser.add_argument('--config', dest="config", default='configs/online_documents.json', type=str, help='配置文件')
     parser.add_argument('--backup_path', dest="backup_path", default='C:/ProjectG/备份/在线文档', type=str, help='备份文件路径')
-    parser.add_argument('--speed', dest="speed", default=3, type=int, help='切换页签的速度(秒)')
+    parser.add_argument('--speed', dest="speed", default=2, type=int, help='切换页签的速度(秒)')
     parser.add_argument('--clipboard', dest="clipboard", default=True, type=bool, help='是否用剪切板模式')
 
     # 路径/c/projectG window会变成 C:/projectG (如果拼接路径会报错)
@@ -122,7 +122,6 @@ if __name__ == '__main__':
         main_config = json.load(file, strict=False)
     options = Options()
     driver = webdriver.Chrome(options=options)
-    action = ActionChains(driver)
     try:
         driver.get(args.url)
         wait = WebDriverWait(driver, 5)
@@ -142,8 +141,10 @@ if __name__ == '__main__':
         directory = args.backup_path + "/" + datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')
         if not os.path.exists(directory):
             os.makedirs(directory)
+        action = ActionChains(driver)
         for sheet_tab in sheet_tabs:
-            sheet_tab.click()
+            # 修复 Element is not clickable at point (XXX, XXX), 设定点击位置
+            action.move_to_element(sheet_tab).move_by_offset(3, 3).click().perform()
             time.sleep(args.speed)  # 简单处理,每个页签都切换就可以
             text = sheet_tab.get_attribute("innerText")
             match_strings = []
