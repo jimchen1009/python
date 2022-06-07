@@ -104,7 +104,7 @@ def generate_date_message():
     date_string = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
     return str.format("【程序全量导出,日期{}】", date_string)
 
-
+#国内镜像地址 https://registry.npmmirror.com/binary.html?path=chromedriver/
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='information')
     parser.add_argument('--url', dest="url",
@@ -113,7 +113,7 @@ if __name__ == '__main__':
     parser.add_argument('--qq', dest="qq", default='771129369', type=str, help='QQ账号')
     parser.add_argument('--config', dest="config", default='configs/online_documents.json', type=str, help='配置文件')
     parser.add_argument('--backup_path', dest="backup_path", default='C:/ProjectG/备份/在线文档', type=str, help='备份文件路径')
-    parser.add_argument('--speed', dest="speed", default=2, type=int, help='切换页签的速度(秒)')
+    parser.add_argument('--speed', dest="speed", default=3, type=int, help='切换页签的速度(秒)')
     parser.add_argument('--clipboard', dest="clipboard", default=True, type=bool, help='是否用剪切板模式')
 
     # 路径/c/projectG window会变成 C:/projectG (如果拼接路径会报错)
