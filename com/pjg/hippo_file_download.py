@@ -139,7 +139,7 @@ if __name__ == '__main__':
 
     options = Options()
     # 下载路径的设置一定要\才生效, 否则下载失败
-    options.add_experimental_option("prefs", {'download.default_directory': download_path})
+    options.add_experimental_option("prefs", {'download.default_directory':  download_path.replace("/", "\\")})
     driver = webdriver.Chrome(options=options)
     try:
         driver.get("https://o.tencent.com/console/")

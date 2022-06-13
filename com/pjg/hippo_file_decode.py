@@ -4,9 +4,11 @@ import os
 
 
 # 前面的顺序是: IP、报错次数、报错时间、报错日志【不能改变】
+import re
 from json import JSONDecodeError
 
 LOG_KEY_TUPLES = [["ip", ""], ["cnt", "1"], ["report_time", ""], ["log", ""], ["minTimeInfo", ""], ["raw_log", ""]]
+LOG_KEY_FILTERS = {"path":  re.compile(r"((workspace\d+_behavior)|(game\d+_gc_\d+)|(app\d+_gc_\d+)|(battle\d+_gc_\d+)|(router\d+_gc_\d+)|(jvm_gc_.*)\.log)", re.M | re.I)}
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='information')
@@ -14,6 +16,7 @@ if __name__ == '__main__':
     parser.add_argument('--output_path', dest="output_path", default=r'C:\Users\chenjingjun\Desktop\hippo_warn\decode', type=str, help='输出路径')
     parser.add_argument('--file_suffix', dest="file_suffix", default=r'decode', type=str, help='增加文件后缀')
     parser.add_argument('--new_line', dest="new_line", default=False, type=bool, help='是否增加空格')
+    parser.add_argument('--filter_enable', dest="filter_enable", default=True, type=bool, help='是否过滤日志')
 
     args = parser.parse_args()
     input_path = args.input_path
@@ -24,7 +27,7 @@ if __name__ == '__main__':
             continue
         input_filename_split = input_filename.split('.')
         write_path = str.format("{}\\{}_{}.{}", args.output_path, input_filename_split[0], args.file_suffix, input_filename_split[1])
-        write_file = open(write_path, 'a', encoding='UTF-8')
+        write_file = open(write_path, 'w', encoding='UTF-8')
         with open(file_path, 'r', encoding='UTF-8') as file:
             file_lines = file.readlines()
             for file_line in file_lines:
@@ -35,6 +38,17 @@ if __name__ == '__main__':
                     json_data = json.loads(file_line)
                 except JSONDecodeError:
                     print(file_line)
+                match_success = False
+                if args.filter_enable:
+                    for LOG_KEY, LOG_PATTERN in LOG_KEY_FILTERS.items():
+                        if LOG_KEY not in json_data:
+                            continue
+                        json_value = json_data[LOG_KEY]
+                        if LOG_PATTERN.search(json_value):
+                            match_success = True
+                            break
+                if match_success:
+                    continue
                 for LOG_KEY_TUPLE in LOG_KEY_TUPLES:
                     LOG_KEY = LOG_KEY_TUPLE[0]
                     if LOG_KEY in json_data:
