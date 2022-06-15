@@ -112,6 +112,7 @@ if __name__ == '__main__':
     parser.add_argument('--hours', dest="hours", default='1', type=int, help='小时')
     parser.add_argument('--range_hours', dest="range_hours", default='120', type=int, help='间隔小时')
     parser.add_argument('--range_minutes', dest="range_minutes", default='0', type=int, help='间隔分钟')
+    parser.add_argument('--range_seconds', dest="range_seconds", default='0', type=int, help='间隔秒')
     parser.add_argument('--download_path', dest="download_path", default=r'D:\demo\python\download', type=str, help='文件保存地址')
 
     # 路径/c/projectG window会变成 C:/projectG (如果拼接路径会报错)
@@ -163,8 +164,8 @@ if __name__ == '__main__':
         select_element.click()
         while_start_time = start_time
         while while_start_time < end_time:
-            range_minutes = args.range_hours * 60 + args.range_minutes
-            while_end_time = while_start_time + datetime.timedelta(minutes=range_minutes)
+            range_seconds = (args.range_hours * 60 + args.range_minutes) * 60 + args.range_seconds
+            while_end_time = while_start_time + datetime.timedelta(seconds=range_seconds)
             if while_end_time > end_time:
                 while_end_time = end_time
             start_time_str = datetime.datetime.strftime(while_start_time, TIME_FORMAT)
@@ -200,7 +201,7 @@ if __name__ == '__main__':
 
             suffix_filenames0 = get_suffix_filenames(download_path, "txt")
             # 查询按钮, 下载文件
-            sleep_seconds = range_minutes / (60 * 24 * 2) + 3
+            sleep_seconds = range_seconds / (60 * 60 * 24 * 2) + 3
             time.sleep(sleep_seconds)
             operation_icons = driver_find_element(driver, By.CLASS_NAME, "result-table-container").find_element(By.CLASS_NAME, "operation-icons")
             download_element = operation_icons.find_element(By.CLASS_NAME, "icon.log-icon.icon-download-icon").find_element(By.XPATH, "..")
