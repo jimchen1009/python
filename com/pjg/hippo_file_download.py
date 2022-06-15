@@ -113,7 +113,7 @@ if __name__ == '__main__':
     parser.add_argument('--range_hours', dest="range_hours", default='120', type=int, help='间隔小时')
     parser.add_argument('--range_minutes', dest="range_minutes", default='0', type=int, help='间隔分钟')
     parser.add_argument('--range_seconds', dest="range_seconds", default='0', type=int, help='间隔秒')
-    parser.add_argument('--download_path', dest="download_path", default=r'D:\demo\python\download', type=str, help='文件保存地址')
+    parser.add_argument('--download_path', dest="download_path", default=r'C:\Users\chenjingjun\Desktop\hippo_warn', type=str, help='文件保存地址')
 
     # 路径/c/projectG window会变成 C:/projectG (如果拼接路径会报错)
     args = parser.parse_args()
@@ -148,7 +148,12 @@ if __name__ == '__main__':
         # QQ登录
         driver_find_element(driver, By.ID, "img_" + args.qq).find_element(By.XPATH, "..").click()
         # APP图标
-        driver_find_element(driver, By.ID, "d_96367").click()
+        app_elements = driver_find_element(driver, By.CLASS_NAME, "appbtn").find_elements(By.XPATH, "../*")
+        for app_element in app_elements:
+            name = app_element.find_elements(By.XPATH, "./*")[1].get_attribute("innerText")
+            if name == "HippoGriffV4":
+                app_element.click()
+                break
         # 休息2s等待新的页签加载
         time.sleep(2)
         window_handles = driver.window_handles
