@@ -12,7 +12,12 @@ from selenium import webdriver
 from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
+
+
+def driver_find_element(driver, by_name, search_name, seconds: float = 10):
+    return WebDriverWait(driver, seconds).until(expected_conditions.presence_of_element_located((by_name, search_name)))
 
 
 def clear_and_backup(driver, name: str, directory: str):
@@ -28,16 +33,14 @@ def clear_and_backup(driver, name: str, directory: str):
 
 def action_operate_board(driver):
     action = ActionChains(driver)
-    operate_board = driver.find_element(By.ID, "canvasContainer").find_element(By.CLASS_NAME, "operate-board")
-    time.sleep(1)
+    operate_board = driver_find_element(driver, By.ID, "canvasContainer").find_element(By.CLASS_NAME, "operate-board")
     action.click(operate_board).perform()
     return action
 
 
 def action_move_left_up(driver):
     action = ActionChains(driver)
-    input_board = driver.find_element(By.ID, "canvasContainer").find_element(By.CLASS_NAME, "table-input-board")
-    time.sleep(1)
+    input_board = driver_find_element(driver, By.ID, "canvasContainer").find_element(By.CLASS_NAME, "table-input-board")
     action.click(input_board).perform()
     action_send_keys(action, 100, Keys.ARROW_LEFT)
     action_send_keys(action, 100, Keys.ARROW_UP)
@@ -104,6 +107,7 @@ def generate_date_message():
     date_string = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
     return str.format("【程序全量导出,日期{}】", date_string)
 
+
 #国内镜像地址 https://registry.npmmirror.com/binary.html?path=chromedriver/
 
 if __name__ == '__main__':
@@ -127,17 +131,15 @@ if __name__ == '__main__':
         driver.get(args.url)
         wait = WebDriverWait(driver, 5)
         driver.maximize_window()
-        driver.find_element(By.ID, "blankpage-button-pc").click()
-        driver.implicitly_wait(2000)
-        login_tabs = driver.find_element(By.ID, "id-login-tabs")
+        driver_find_element(driver, By.ID, "blankpage-button-pc").click()
+        login_tabs = driver_find_element(driver, By.ID, "id-login-tabs")
         login_tabs.find_element(By.ID, "qq-tabs-title").click()
         driver.implicitly_wait(2000)
-        login_frame = driver.find_element(By.ID, "login_frame")
+        login_frame = driver_find_element(driver, By.ID, "login_frame")
         driver.switch_to.frame(login_frame)
-
-        driver.find_element(By.ID, "img_" + args.qq).find_element(By.XPATH, "..").click()
+        driver_find_element(driver, By.ID, "img_" + args.qq).find_element(By.XPATH, "..").click()
         time.sleep(args.speed)  # 简单处理,每个页签都切换就可以
-        sheet_tabs = driver.find_element(By.ID, "sheetbarContainer").find_elements(By.CLASS_NAME, "sheet-box.sheet.sheet-tab-blur")
+        sheet_tabs = driver_find_element(driver, By.ID, "sheetbarContainer").find_elements(By.CLASS_NAME, "sheet-box.sheet.sheet-tab-blur")
 
         directory = args.backup_path + "/" + datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')
         if not os.path.exists(directory):
@@ -151,8 +153,7 @@ if __name__ == '__main__':
             match_strings = []
             if text not in main_config:
                 continue
-            sheet_focus = driver.find_element(By.ID, "sheetbarContainer").find_element(By.CLASS_NAME, "sheet-box.sheet.sheet-tab-focus")
-            time.sleep(args.speed)  # 简单处理,每个页签都切换就可以
+            sheet_focus = driver_find_element(driver, By.ID, "sheetbarContainer").find_element(By.CLASS_NAME, "sheet-box.sheet.sheet-tab-focus")
             text_focus = sheet_focus.get_attribute("innerText")
             if text_focus != text:
                 print(str.format("页签[{}]不是选中页签[{}],错误跳过.", text, text_focus))
