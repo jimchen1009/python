@@ -166,6 +166,7 @@ if __name__ == '__main__':
         driver_find_element(driver, By.CLASS_NAME, "bk-tab-content.data-search").find_element(By.CLASS_NAME, "bk-select.is-default-trigger").click()
         select_elements = driver_find_element(driver, By.CLASS_NAME, "bk-tooltip-content").find_element(By.CLASS_NAME, "bk-options.bk-options-single").find_elements(By.XPATH, "./*")
         select_element = select_elements[LOG_ELEMENT_SELECT[args.log_warn]]
+        time.sleep(0.5)
         select_element.click()
         while_start_time = start_time
         while while_start_time < end_time:
@@ -176,15 +177,18 @@ if __name__ == '__main__':
             start_time_str = datetime.datetime.strftime(while_start_time, TIME_FORMAT)
             end_time_str = datetime.datetime.strftime(while_end_time, TIME_FORMAT)
             # 时间的元素,修改显示的时间(但是不会生效)
-            time_ui_element = driver_find_element(driver, By.CLASS_NAME, "bk-date-picker-rel").find_element(By.CLASS_NAME, "trigger").find_elements(By.XPATH, "./*")[1]
-            driver.execute_script(str.format("arguments[0].innerText = '{} - {}'", start_time_str, end_time_str), time_ui_element)
+            # time_ui_element = driver_find_element(driver, By.CLASS_NAME, "bk-date-picker-rel").find_element(By.CLASS_NAME, "trigger").find_elements(By.XPATH, "./*")[1]
+            # driver.execute_script(str.format("arguments[0].innerText = '{} - {}'", start_time_str, end_time_str), time_ui_element)
             # 点击显示的时间控件
             driver_find_element(driver, By.CLASS_NAME, "bk-date-picker.long.king-date-picker.is-retrieve-detail").click()
             # 选择时间区间
             if while_start_time.month == while_end_time.month:
                 # 月期相同只在第一个面板选择
                 driver_choose_date(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-left", while_start_time.day)
-                driver_choose_date(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-right", while_end_time.day)
+                # 在2022-06-29号，08点到21点的日志，第二次driver_choose_date之后自动跳到05-09号开始
+                # 验证在其他日志27 28号都不会，暂时同一天的情况就不点击第二次了
+                if while_start_time.day != while_end_time.day:
+                    driver_choose_date(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-left", while_end_time.day)
             else:
                 driver_choose_date(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-left", while_start_time.day)
                 driver_choose_date(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-right", while_end_time.day)
