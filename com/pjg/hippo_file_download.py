@@ -58,12 +58,39 @@ def driver_choose_date(driver, by_name, search_name, choose_time: datetime.datet
     time.sleep(0.1)
 
 
-def driver_choose_date(driver, by_name, search_name, day: int):
-    find_element = driver_find_element(driver, by_name, search_name).find_element(By.CLASS_NAME, "bk-date-picker-cells")
+def driver_choose_month(driver, by_name, search_name, choose_time: datetime.datetime):
+    search_element = driver_find_element(driver, by_name, search_name)
+
+    find_element = search_element.find_elements(By.XPATH, "./*")[0]
+    find_element = find_element.find_elements(By.XPATH, "./*")[2]
+    find_element = find_element.find_element(By.CLASS_NAME, "bk-date-picker-header-label")
+    find_element.click()
+    time.sleep(0.1)
+    find_element = search_element.find_element(By.CLASS_NAME, "bk-date-picker-cells.bk-date-picker-cells-year")
+    year_num_elements = find_element.find_elements(By.XPATH, "./*")
+    for year_num_element in year_num_elements:
+        year_name = year_num_element.find_elements(By.XPATH, "./*")[0].get_attribute("innerText")
+        if year_name == str(choose_time.year):
+            year_num_element.click()
+            time.sleep(0.1)
+            break
+    find_element = search_element.find_element(By.CLASS_NAME, "bk-date-picker-cells.bk-date-picker-cells-month")
+    month_num_elements = find_element.find_elements(By.XPATH, "./*")
+    for month_num_element in month_num_elements:
+        month_name = month_num_element.find_elements(By.XPATH, "./*")[0].get_attribute("innerText")
+        if month_name == str(choose_time.month).zfill(2):
+            month_num_element.click()
+            time.sleep(0.1)
+            break
+
+
+def driver_choose_date(driver, by_name, search_name, choose_time: datetime.datetime):
+    search_element = driver_find_element(driver, by_name, search_name)
+    find_element = search_element.find_element(By.CLASS_NAME, "bk-date-picker-cells")
     day_num_elements = find_element.find_elements(By.XPATH, "./*")
     for day_num_element in day_num_elements:
-        name = day_num_element.find_elements(By.XPATH, "./*")[0].get_attribute("innerText")
-        if name == str(day):
+        day_name = day_num_element.find_elements(By.XPATH, "./*")[0].get_attribute("innerText")
+        if day_name == str(choose_time.day):
             day_num_element.click()
             break
     time.sleep(0.1)
@@ -184,14 +211,17 @@ if __name__ == '__main__':
             # 选择时间区间
             if while_start_time.month == while_end_time.month:
                 # 月期相同只在第一个面板选择
-                driver_choose_date(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-left", while_start_time.day)
+                driver_choose_month(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-left", while_start_time)
+                driver_choose_date(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-left", while_start_time)
                 # 在2022-06-29号，08点到21点的日志，第二次driver_choose_date之后自动跳到05-09号开始
                 # 验证在其他日志27 28号都不会，暂时同一天的情况就不点击第二次了
                 if while_start_time.day != while_end_time.day:
-                    driver_choose_date(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-left", while_end_time.day)
+                    driver_choose_date(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-left", while_end_time)
             else:
-                driver_choose_date(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-left", while_start_time.day)
-                driver_choose_date(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-right", while_end_time.day)
+                driver_choose_month(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-left", while_start_time)
+                driver_choose_date(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-left", while_start_time)
+                driver_choose_month(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-right", while_end_time)
+                driver_choose_date(driver, By.CLASS_NAME, "bk-picker-panel-content.bk-picker-panel-content-right", while_end_time)
             # 点击确认开始搜索
             confirm_elements = driver_find_element(driver, By.CLASS_NAME, "bk-date-picker-dropdown").find_element(By.CLASS_NAME, "bk-picker-confirm").find_elements(By.XPATH, "./*")
             for confirm_element in confirm_elements:
