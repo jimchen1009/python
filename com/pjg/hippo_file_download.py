@@ -173,9 +173,13 @@ if __name__ == '__main__':
         driver.get("https://o.tencent.com/console/")
         driver.maximize_window()
         # QQ登录
-        driver_find_element(driver, By.ID, "img_" + args.qq).find_element(By.XPATH, "..").click()
+        try:
+            driver_find_element(driver, By.ID, "img_" + args.qq, 5).find_element(By.XPATH, "..").click()
+        except TimeoutException:
+            # 检测在线QQ失败, 找对应的二维码
+            driver_find_element(driver, By.ID, "qr_area", 5)
         # APP图标
-        app_elements = driver_find_element(driver, By.CLASS_NAME, "appbtn").find_elements(By.XPATH, "../*")
+        app_elements = driver_find_element(driver, By.CLASS_NAME, "appbtn", 120).find_elements(By.XPATH, "../*")
         for app_element in app_elements:
             name = app_element.find_elements(By.XPATH, "./*")[1].get_attribute("innerText")
             if name == "HippoGriffV4":
