@@ -70,5 +70,11 @@
 		"title":  ["id", "chapterName", "storyName"],
 		"sheetname": "export_story",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/story.xlsx"
+	},
+	"物品ID": {
+		"typeId": 2,
+		"title":  ["id", "main_type", "sub_type", "name", "expiredTime", "canSell", "price", "desc"],
+		"sheetname": "export_item",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/item.xlsx"
 	}
 }

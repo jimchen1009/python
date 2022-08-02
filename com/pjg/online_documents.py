@@ -24,9 +24,9 @@ def clear_and_backup(driver, name: str, directory: str):
     action = action_operate_board(driver)
     action.key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).perform()
     action.key_down(Keys.CONTROL).send_keys("c").key_up(Keys.CONTROL).perform()
-    write_data = pandas.read_clipboard(sep="\t", encoding="UTF-8")
-    file_name = str.format("{}\{}.xlsx", directory, name)
-    write_data.to_excel(excel_writer=file_name, encoding="UTF-8")
+    # write_data = pandas.read_clipboard(sep="\t", encoding="UTF-8")
+    # file_name = str.format("{}\{}.xlsx", directory, name)
+    # write_data.to_excel(excel_writer=file_name, encoding="UTF-8")
     action.send_keys(Keys.DELETE).perform()
     return action_move_left_up(driver)
 
@@ -146,10 +146,15 @@ if __name__ == '__main__':
             os.makedirs(directory)
         action = ActionChains(driver)
         for sheet_tab in sheet_tabs:
-            # 修复 Element is not clickable at point (XXX, XXX), 设定点击位置
-            action.move_to_element(sheet_tab).move_by_offset(3, 3).click().perform()
-            time.sleep(args.speed)  # 简单处理,每个页签都切换就可以
+            x = sheet_tab.location.get("x")
+            y = sheet_tab.location.get("y")
             text = sheet_tab.get_attribute("innerText")
+            print(str.format("{}({}, {})", text, x, y))
+            if x == 0 and y == 0:
+                continue
+            # 修复 Element is not clickable at point (XXX, XXX), 设定点击位置
+            time.sleep(args.speed)  # 简单处理,每个页签都切换就可以
+            action.move_to_element(sheet_tab).click().perform()
             match_strings = []
             if text not in main_config:
                 continue
@@ -174,7 +179,7 @@ if __name__ == '__main__':
                 df = pandas.DataFrame(match_strings[1:], columns=columns)
                 df.to_clipboard(index=False)
                 action.key_down(Keys.CONTROL).send_keys("v").key_up(Keys.CONTROL).perform()
-                action = action_operate_board(driver)
+                #action = action_operate_board(driver)
                 pyperclip.copy("")  # 直接清空剪切板的数据
             else:
                 for match_string in match_strings:

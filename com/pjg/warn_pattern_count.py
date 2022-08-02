@@ -198,7 +198,8 @@ if __name__ == '__main__':
     message_list = []
     for warn_pattern in warn_pattern_list:
         if args.filter_count and warn_pattern.count < warn_pattern.get_warn_count():
-            ignore_message_batch_list.append(warn_pattern)
+            if warn_pattern.get_warn_count() < 9999999:
+                ignore_message_batch_list.append(warn_pattern)
         else:
             message_list.append(warn_pattern)
             message_list.append("\n")
