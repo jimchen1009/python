@@ -42,8 +42,8 @@ def action_move_left_up(driver):
     action = ActionChains(driver)
     input_board = driver_find_element(driver, By.ID, "canvasContainer").find_element(By.CLASS_NAME, "table-input-board")
     action.click(input_board).perform()
-    action_send_keys(action, 100, Keys.ARROW_LEFT)
-    action_send_keys(action, 100, Keys.ARROW_UP)
+    action_send_keys(action, 500, Keys.ARROW_LEFT)
+    action_send_keys(action, 500, Keys.ARROW_UP)
     return action
 
 
@@ -82,6 +82,7 @@ def execute_load_data2(config):
     sheet = workbook.sheet_by_name(sheet_name)
     return_strings = []
     ids = []
+    name_ids = {}
     for rx in range(5, sheet.nrows):
         cells = sheet.row(rx)
         if rx == 5:
@@ -89,12 +90,15 @@ def execute_load_data2(config):
                 cell = cells[i]
                 if cell.value in title:
                     ids.append(i)
+                    name_ids[cell.value] = i
         elif rx > 5:
             strings = []
-            for i in range(0, len(cells)):
+            for name in title:
+                if name not in name_ids:
+                    continue
+                i = name_ids[name]
                 cell = cells[i]
-                if i in ids:
-                    strings.append(cell.value)
+                strings.append(cell.value)
             if rx == 6:
                 strings.append(generate_date_message())
             else:
@@ -179,7 +183,7 @@ if __name__ == '__main__':
                 df = pandas.DataFrame(match_strings[1:], columns=columns)
                 df.to_clipboard(index=False)
                 action.key_down(Keys.CONTROL).send_keys("v").key_up(Keys.CONTROL).perform()
-                #action = action_operate_board(driver)
+                action = action_operate_board(driver)
                 pyperclip.copy("")  # 直接清空剪切板的数据
             else:
                 for match_string in match_strings:
