@@ -1,47 +1,47 @@
 {
-	"物品产出来源": {
+	"物品产出来源(程序)": {
 		"typeId": 1,
 		"title":  ["产出ID", "描述"],
 		"expression": "new GetApproach\\((?P<id>\\d+), \"(?P<name>\\w+)\"\\)",
 		"filename":  "C:/ProjectG/pjg-common/src/main/java/com/bt/pjg/common/material/GetApproach.java"
 	},
-	"物品消耗来源": {
+	"物品消耗来源(程序)": {
 		"typeId": 1,
 		"title":  ["产出ID", "描述"],
 		"expression": "new DecReason\\((?P<id>\\d+), \"(?P<name>\\w+)\"\\)",
 		"filename":  "C:/ProjectG/pjg-common/src/main/java/com/bt/pjg/common/material/DecReason.java"
 	},
-	"货币": {
+	"货币(程序)": {
 		"typeId": 2,
 		"title":  ["id", "name", "icon", "desc", "recover_time", "recover_num", "recover_limit", "max_limit", "expiredTime"],
 		"sheetname": "export_currency",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/item.xlsx"
 	},
-	"食魂id": {
+	"食魂id(程序)": {
 		"typeId": 2,
 		"title":  ["id", "name"],
 		"sheetname": "export_角色",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/hero.xlsx"
 	},
-	"关卡": {
+	"关卡(程序)": {
 		"typeId": 2,
 		"title":  ["barrierId", "title", "cost"],
 		"sheetname": "export_关卡配置",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/fb.xlsx"
 	},
-	"活动bossID": {
+	"活动bossID(程序)": {
 		"typeId": 2,
 		"title":  ["id", "name"],
 		"sheetname": "export_活动BOSS",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/activity_boss.xlsx"
 	},
-	"活动副本类型": {
+	"活动副本类型(程序)": {
 		"typeId": 2,
 		"title":  ["dungeonType", "name"],
 		"sheetname": "export_活动章节类型",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/fbActivity.xlsx"
 	},
-	"活动关卡": {
+	"活动关卡(程序)": {
 		"typeId": 2,
 		"title":  ["barrierId", "title", "cost"],
 		"sheetname": "export_活动关卡",
@@ -59,88 +59,94 @@
 		"sheetname": "export_cookbook",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/cookbook.xlsx"
 	},
-	"活动": {
+	"活动(程序)": {
 		"typeId": 2,
 		"title":  ["id", "name", "typeId", "typeName", "openState", "startTime", "endTime"],
 		"sheetname": "export_活动配置",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/activity.xlsx"
 	},
-	"故事": {
+	"故事(程序)": {
 		"typeId": 2,
 		"title":  ["id", "chapterName", "storyName"],
 		"sheetname": "export_story",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/story.xlsx"
 	},
-	"物品ID": {
+	"物品ID(程序)": {
 		"typeId": 2,
 		"title":  ["id", "main_type", "sub_type", "name", "expiredTime", "canSell", "price", "desc"],
 		"sheetname": "export_item",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/item.xlsx"
 	},
-	"直购商品": {
+	"直购商品(程序)": {
 		"typeId": 2,
-		"title":  ["id", "name", "online", "onlineTime", "offlineTime", "amount", "diamond"],
+		"title":  ["id", "name", "comment", "online", "onlineTime", "offlineTime", "amount", "diamond"],
 		"sheetname": "export_充值项",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/topup.xlsx"
 	},
-	"配饰": {
+	"配饰(程序)": {
 		"typeId": 2,
 		"title":  ["id", "type", "heroCharacterId", "name", "describe"],
 		"sheetname": "export_皮肤配饰",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/accessories.xlsx"
 	},
-	"皮肤": {
+	"皮肤(程序)": {
 		"typeId": 2,
 		"title":  ["id", "name", "comment"],
 		"sheetname": "export_角色皮肤",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/skin.xlsx"
 	},
-	"特殊物品": {
+	"特殊物品(程序)": {
 		"typeId": 2,
 		"title":  ["id", "name", "rank", "desc", "showInMail"],
 		"sheetname": "export_special",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/item.xlsx"
 	},
-	"家具": {
+	"家具(程序)": {
 		"typeId": 2,
 		"title":  ["id", "name", "desc"],
 		"sheetname": "export_furniture",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/house.xlsx"
 	},
-	"徽章": {
+	"徽章(程序)": {
 		"typeId": 2,
 		"title":  ["id", "name", "online", "desc"],
 		"sheetname": "export_勋章",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/medal.xlsx"
 	},
-	"卡池": {
+	"卡池(程序)": {
 		"typeId": 2,
 		"title":  ["id", "comment", "title", "isOnline", "beginTime", "endTime"],
 		"sheetname": "export_卡池配置",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/summon.xlsx"
 	},
-	"家具卡池": {
+	"家具卡池(程序)": {
 		"typeId": 2,
 		"title":  ["id", "title", "subTitle", "openTime"],
 		"sheetname": "export_家具奖池",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/furnitureLottery.xlsx"
 	},
-	"无限池": {
+	"无限池(程序)": {
 		"typeId": 2,
 		"title":  ["activityId", "id", "name", "unlockType", "unlockTip", "unlockManually", "unlockManually", "cost", "unlockParam"],
 		"sheetname": "export_167无限池",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/activity.xlsx"
 	},
-	"玩家装饰": {
+	"玩家装饰(程序)": {
 		"typeId": 2,
 		"title":  ["id", "type", "name", "quality", "description"],
 		"sheetname": "export_SystemChat",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/player_facade.xlsx"
 	},
-	"音乐": {
+	"音乐(程序)": {
 		"typeId": 2,
 		"title":  ["id", "name", "isOnline", "desc"],
 		"sheetname": "export_背景音乐",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/music.xlsx"
+	},
+	"付费礼包(程序)": {
+		"typeId": 2,
+		"title":  ["id", "name", "comment", "online", "onlineTime", "offlineTime", "originalPrice", "currencyId", "price", "bonus", "tagDesc"],
+		"sheetname": "export_礼包商城",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/topup.xlsx"
 	}
 }
