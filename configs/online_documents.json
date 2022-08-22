@@ -76,5 +76,71 @@
 		"title":  ["id", "main_type", "sub_type", "name", "expiredTime", "canSell", "price", "desc"],
 		"sheetname": "export_item",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/item.xlsx"
+	},
+	"直购商品": {
+		"typeId": 2,
+		"title":  ["id", "name", "online", "onlineTime", "offlineTime", "amount", "diamond"],
+		"sheetname": "export_充值项",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/topup.xlsx"
+	},
+	"配饰": {
+		"typeId": 2,
+		"title":  ["id", "type", "heroCharacterId", "name", "describe"],
+		"sheetname": "export_皮肤配饰",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/accessories.xlsx"
+	},
+	"皮肤": {
+		"typeId": 2,
+		"title":  ["id", "name", "comment"],
+		"sheetname": "export_角色皮肤",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/skin.xlsx"
+	},
+	"特殊物品": {
+		"typeId": 2,
+		"title":  ["id", "name", "rank", "desc", "showInMail"],
+		"sheetname": "export_special",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/item.xlsx"
+	},
+	"家具": {
+		"typeId": 2,
+		"title":  ["id", "name", "desc"],
+		"sheetname": "export_furniture",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/house.xlsx"
+	},
+	"徽章": {
+		"typeId": 2,
+		"title":  ["id", "name", "online", "desc"],
+		"sheetname": "export_勋章",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/medal.xlsx"
+	},
+	"卡池": {
+		"typeId": 2,
+		"title":  ["id", "comment", "title", "isOnline", "beginTime", "endTime"],
+		"sheetname": "export_卡池配置",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/summon.xlsx"
+	},
+	"家具卡池": {
+		"typeId": 2,
+		"title":  ["id", "title", "subTitle", "openTime"],
+		"sheetname": "export_家具奖池",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/furnitureLottery.xlsx"
+	},
+	"无限池": {
+		"typeId": 2,
+		"title":  ["activityId", "id", "name", "unlockType", "unlockTip", "unlockManually", "unlockManually", "cost", "unlockParam"],
+		"sheetname": "export_167无限池",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/activity.xlsx"
+	},
+	"玩家装饰": {
+		"typeId": 2,
+		"title":  ["id", "type", "name", "quality", "description"],
+		"sheetname": "export_SystemChat",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/player_facade.xlsx"
+	},
+	"音乐": {
+		"typeId": 2,
+		"title":  ["id", "name", "isOnline", "desc"],
+		"sheetname": "export_背景音乐",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/music.xlsx"
 	}
 }

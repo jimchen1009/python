@@ -22,26 +22,22 @@ def driver_find_element(driver, by_name, search_name, seconds: float = 10):
 
 def clear_and_backup(driver, name: str, directory: str):
     action = action_operate_board(driver)
+    action_send_keys(action, 500, Keys.ARROW_LEFT)
+    action_send_keys(action, 500, Keys.ARROW_UP)
     action.key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).perform()
     action.key_down(Keys.CONTROL).send_keys("c").key_up(Keys.CONTROL).perform()
-    # write_data = pandas.read_clipboard(sep="\t", encoding="UTF-8")
-    # file_name = str.format("{}\{}.xlsx", directory, name)
-    # write_data.to_excel(excel_writer=file_name, encoding="UTF-8")
     action.send_keys(Keys.DELETE).perform()
-    return action_move_left_up(driver)
-
+    return action
 
 def action_operate_board(driver):
     action = ActionChains(driver)
-    operate_board = driver_find_element(driver, By.ID, "canvasContainer").find_element(By.CLASS_NAME, "operate-board")
+    operate_board = driver_find_element(driver, By.ID, "canvasContainer").find_element(By.CLASS_NAME, "main-board")
     action.click(operate_board).perform()
     return action
 
 
 def action_move_left_up(driver):
     action = ActionChains(driver)
-    input_board = driver_find_element(driver, By.ID, "canvasContainer").find_element(By.CLASS_NAME, "table-input-board")
-    action.click(input_board).perform()
     action_send_keys(action, 500, Keys.ARROW_LEFT)
     action_send_keys(action, 500, Keys.ARROW_UP)
     return action
@@ -168,7 +164,7 @@ if __name__ == '__main__':
                 print(str.format("页签[{}]不是选中页签[{}],错误跳过.", text, text_focus))
                 continue
             config = main_config[text]
-            action = clear_and_backup(driver, text, directory)
+            clear_and_backup(driver, text, directory)
             typeId = config["typeId"]
             if typeId == 1:
                 match_strings = execute_load_data1(config)
@@ -178,12 +174,14 @@ if __name__ == '__main__':
             if length == 0:
                 continue
             print(str.format("页签[{}]开始导出{}行数据...", text, length - 1))
+            time.sleep(0.1)
             if args.clipboard:
                 columns = match_strings[0]
                 df = pandas.DataFrame(match_strings[1:], columns=columns)
                 df.to_clipboard(index=False)
+                action_send_keys(action, 100, Keys.ARROW_LEFT)
+                action_send_keys(action, 100, Keys.ARROW_UP)
                 action.key_down(Keys.CONTROL).send_keys("v").key_up(Keys.CONTROL).perform()
-                action = action_operate_board(driver)
                 pyperclip.copy("")  # 直接清空剪切板的数据
             else:
                 for match_string in match_strings:
