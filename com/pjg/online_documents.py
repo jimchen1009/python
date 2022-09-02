@@ -145,7 +145,12 @@ if __name__ == '__main__':
         if not os.path.exists(directory):
             os.makedirs(directory)
         action = ActionChains(driver)
+        sheet_tab_List = []
         for sheet_tab in sheet_tabs:
+            sheet_tab_List.append(sheet_tab)
+        while len(sheet_tab_List) > 0:
+            sheet_tab = sheet_tab_List[0]
+            del sheet_tab_List[0]
             x = sheet_tab.location.get("x")
             y = sheet_tab.location.get("y")
             text = sheet_tab.get_attribute("innerText")
@@ -162,6 +167,7 @@ if __name__ == '__main__':
             text_focus = sheet_focus.get_attribute("innerText")
             if text_focus != text:
                 print(str.format("页签[{}]不是选中页签[{}],错误跳过.", text, text_focus))
+                sheet_tab_List.insert(0, sheet_tab)
                 continue
             config = main_config[text]
             clear_and_backup(driver, text, directory)
@@ -174,7 +180,6 @@ if __name__ == '__main__':
             if length == 0:
                 continue
             print(str.format("页签[{}]开始导出{}行数据...", text, length - 1))
-            time.sleep(0.1)
             if args.clipboard:
                 columns = match_strings[0]
                 df = pandas.DataFrame(match_strings[1:], columns=columns)

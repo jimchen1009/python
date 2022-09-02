@@ -148,5 +148,17 @@
 		"title":  ["id", "name", "comment", "online", "onlineTime", "offlineTime", "originalPrice", "currencyId", "price", "bonus", "tagDesc"],
 		"sheetname": "export_礼包商城",
 		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/topup.xlsx"
+	},
+	"膳具ID(程序)": {
+		"typeId": 2,
+		"title":  ["id", "sub_type", "name", "rank", "price", "desc"],
+		"sheetname": "export_equip",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/equip.xlsx"
+	},
+	"膳具套装(程序)": {
+		"typeId": 2,
+		"title":  ["id", "name", "equips", "desc"],
+		"sheetname": "export_quipset",
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/equip.xlsx"
 	}
 }
