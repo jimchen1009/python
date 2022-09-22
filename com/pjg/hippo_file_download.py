@@ -6,6 +6,7 @@ from urllib.parse import unquote
 
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver import ActionChains
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
@@ -133,7 +134,7 @@ if __name__ == '__main__':
     parser.add_argument('--url', dest="url", default='https://apps.o.tencent.com/tencent-bkapp-hippogriff-4-prod/api/v1/search/index_set/#INDEX_SET#/export/', type=str, help='下载地址[废弃]')
     parser.add_argument('--qq', dest="qq", default='771129369', type=str, help='QQ账号')
     parser.add_argument('--log_warn', dest="log_warn", default='log_hour', type=str, help='日志汇总类型:log,log_day,log_hour')
-    parser.add_argument('--start_time', dest="start_time", default='', type=str, help='开始时间')
+    parser.add_argument('--start_time', dest="start_time", default='2022-09-22 0:00:00', type=str, help='开始时间')
     parser.add_argument('--end_time', dest="end_time", default='', type=str, help='结算时间')
     parser.add_argument('--days', dest="days", default=1, type=int, help='天数')
     parser.add_argument('--hours', dest="hours", default='1', type=int, help='小时')
@@ -247,7 +248,13 @@ if __name__ == '__main__':
             sleep_seconds = range_seconds / (60 * 60 * 24 * 2) + 3
             time.sleep(sleep_seconds)
             operation_icons = driver_find_element(driver, By.CLASS_NAME, "result-table-container").find_element(By.CLASS_NAME, "operation-icons")
-            download_element = operation_icons.find_element(By.CLASS_NAME, "icon.log-icon.icon-download-icon").find_element(By.XPATH, "..")
+            bk_tooltip = operation_icons.find_elements(By.XPATH, "./*")[1]
+            action = ActionChains(driver)
+            action.move_to_element(bk_tooltip).perform()
+            download_dialog = driver_find_element(driver, By.CLASS_NAME, "download-box").find_elements(By.XPATH, "./*")[0]
+            download_dialog.click()
+            download_element = driver_find_element(driver, By.CLASS_NAME, "bk-dialog-wrapper.async-export-dialog").find_element(By.CLASS_NAME, "bk-primary.bk-button-normal.bk-button")
+            time.sleep(0.5) #停留0.5s看看面板，不闪现
             driver.execute_script("arguments[0].click()", download_element)  # 第二或者第三次，点击按钮就没反应, 所以用js实现
             try:
                 driver_find_element(driver, By.CLASS_NAME, "bk-table-empty-text", seconds=2)

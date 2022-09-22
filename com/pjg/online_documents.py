@@ -120,6 +120,7 @@ if __name__ == '__main__':
     parser.add_argument('--backup_path', dest="backup_path", default='C:/ProjectG/备份/在线文档', type=str, help='备份文件路径')
     parser.add_argument('--speed', dest="speed", default=2, type=int, help='切换页签的速度(秒)')
     parser.add_argument('--clipboard', dest="clipboard", default=True, type=bool, help='是否用剪切板模式')
+    parser.add_argument('--tabs_only', dest="tabs_only", default="", type=str, help='指定特定的页签')
 
     # 路径/c/projectG window会变成 C:/projectG (如果拼接路径会报错)
     args = parser.parse_args()
@@ -146,6 +147,9 @@ if __name__ == '__main__':
             os.makedirs(directory)
         action = ActionChains(driver)
         sheet_tab_List = []
+        tabs_only = []
+        if len(args.tabs_only) > 0 :
+            tabs_only = args.tabs_only.split(",")
         for sheet_tab in sheet_tabs:
             sheet_tab_List.append(sheet_tab)
         while len(sheet_tab_List) > 0:
@@ -162,6 +166,8 @@ if __name__ == '__main__':
             action.move_to_element(sheet_tab).click().perform()
             match_strings = []
             if text not in main_config:
+                continue
+            if len(tabs_only) > 0 and text not in tabs_only:
                 continue
             sheet_focus = driver_find_element(driver, By.ID, "sheetbarContainer").find_element(By.CLASS_NAME, "sheet-box.sheet.sheet-tab-focus")
             text_focus = sheet_focus.get_attribute("innerText")
