@@ -8,9 +8,9 @@ from re import Pattern
 import demjson
 
 PATTERN_REPLACE_PATTERNS = [
-    [re.compile(r'at com\.sun\.proxy\.\$Proxy\d+\.'), r'com.sun.proxy.\\$Proxy\\d+.'],
-    [re.compile(r'sun\.reflect\.GeneratedMethodAccessor\d+\.invoke'), r'sun.reflect.GeneratedMethodAccessor\\d+.invoke'],
-    [re.compile(r'\.java:\d+\)'), r'.java:\\d+)']
+    [re.compile("at com\\.sun\\.proxy\\.\\$Proxy\\d+\\."), r'com.sun.proxy.\\$Proxy\\d+.'],
+    [re.compile("sun\\.reflect\\.GeneratedMethodAccessor\\d+\\.invoke"), r'sun.reflect.GeneratedMethodAccessor\\d+.invoke'],
+    [re.compile("\\.java:\\d+\\)"), r'.java:\\d+)']
 ]
 
 
@@ -109,6 +109,12 @@ def prepare_warn_pattern(pattern_batch_list: list):
     warn_pattern_list = []
     for pattern_batch in pattern_batch_list:
         line_batch = pattern_batch.message
+        for PATTERN_REPLACE_PATTERN in PATTERN_REPLACE_PATTERNS:
+            pattern = PATTERN_REPLACE_PATTERN[0]
+            replace = PATTERN_REPLACE_PATTERN[1]
+            matcher = pattern.search(line_batch)
+            if matcher:
+                line_batch = pattern.sub(replace, line_batch)
         splits = line_batch.split("\n", 1)
         # 字符串的key值没有引号，用 demjson.decode(）
         # 正则表达式要按照 ACII顺序排列: [-\d_\w+]
@@ -122,12 +128,6 @@ def prepare_warn_pattern(pattern_batch_list: list):
             line_batch = line_batch1 + "\n" + line_batch2
         else:
             line_batch = line_splits[0]
-        for PATTERN_REPLACE_PATTERN in PATTERN_REPLACE_PATTERNS:
-            pattern = PATTERN_REPLACE_PATTERN[0]
-            replace = PATTERN_REPLACE_PATTERN[1]
-            matcher = pattern.search(line_batch)
-            if matcher:
-                line_batch = pattern.sub(replace, line_batch)
         warn_pattern_list.append(WarnPattern(line_batch, parameter))
     return warn_pattern_list
 
