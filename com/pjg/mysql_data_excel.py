@@ -10,10 +10,10 @@ TABLE_ITEMS = {
 }
 
 SERVER_ITEMS = {
-    "aqq": [["服务器(手Q、微信)", 2], ["平台(iOS、安卓)", 1]],
-    "awx": [["服务器(手Q、微信)", 1], ["平台(iOS、安卓)", 1]],
-    "iqq": [["服务器(手Q、微信)", 2], ["平台(iOS、安卓)", 0]],
-    "iwx": [["服务器(手Q、微信)", 1], ["平台(iOS、安卓)", 0]]
+    "aqq": [["服务器(手Q2、微信1)", 2], ["平台(安卓1、iOS0)", 1]],
+    "awx": [["服务器(手Q2、微信1)", 1], ["平台(安卓1、iOS0)", 1]],
+    "iqq": [["服务器(手Q2、微信1)", 2], ["平台(安卓1、iOS0)", 0]],
+    "iwx": [["服务器(手Q2、微信1)", 1], ["平台(安卓1、iOS0)", 0]]
 }
 
 USE_NAMES = {
@@ -36,46 +36,49 @@ if __name__ == '__main__':
         os.remove(excel_path)
     input_filenames = os.listdir(input_path)
     work_book = Workbook(encoding="UTF-8")
+    add_sheets = {}
     for input_filename in input_filenames:
         if not input_filename.__contains__("db"):
             continue
-        sheet_name = input_filename.replace("db_swy_user_", "")
-        sheet = work_book.add_sheet(sheet_name)
-        server_name = sheet_name.split("_", maxsplit=1)[0]
-        table_name = sheet_name.split("_", maxsplit=1)[1]
+        split_name = input_filename.replace("db_swy_user_", "").split("_", maxsplit=1)
+        server_name = split_name[0]
+        table_name = split_name[1]
+        if table_name not in add_sheets:
+            sheet = work_book.add_sheet(table_name)
+            add_sheets[table_name] = {"sheet": sheet, "length": 0, "indexes": None}
+        add_sheet = add_sheets[table_name]
+        sheet = add_sheet["sheet"]
         file_path = input_path + "/" + input_filename
         with open(file_path, 'r', encoding='UTF-8') as file:
             file_lines = file.readlines()
-            indexes = {}
-            for i in range(len(file_lines)):
-                file_line = file_lines[i]
+            indexes = add_sheet["indexes"]
+            item_list = []
+            item_list.extend(SERVER_ITEMS[server_name])
+            item_list.extend(TABLE_ITEMS[table_name])
+            if indexes is None:
+                file_line = file_lines[0]
                 splits = file_line.split("\t")
-                index = 0
+                indexes = {}
                 for j in range(len(splits)):
                     split = splits[j]
-                    if i == 0:
-                        if split in USE_NAMES:
-                            indexes[j] = len(indexes)
-                            sheet.write(i,  indexes[j], USE_NAMES[split])
-                    else:
-                        if j in indexes:
-                            sheet.write(i, indexes[j], split)
-            width = len(indexes)
-            server_items = SERVER_ITEMS[server_name]
-            for i in range(len(file_lines)):
-                for j in range(len(server_items)):
-                    server_item = server_items[j]
-                    if i == 0:
-                        sheet.write(0, width + j, server_item[0])
-                    else:
-                        sheet.write(i, width + j, server_item[1])
-            width = width + len(server_items)
-            table_items = TABLE_ITEMS[table_name]
-            for i in range(len(file_lines)):
-                for j in range(len(table_items)):
-                    table_item = table_items[j]
-                    if i == 0:
-                        sheet.write(0, width + j, table_item[0])
-                    else:
-                        sheet.write(i, width + j, table_item[1])
+                    if split in USE_NAMES:
+                        indexes[j] = len(indexes)
+                        sheet.write(0, indexes[j], USE_NAMES[split])
+                add_sheet["indexes"] = indexes
+                length = 1
+                for j in range(len(item_list)):
+                    sheet.write(0, len(indexes) + j, item_list[j][0])
+            else:
+                length = add_sheet["length"]
+            for i in range(1, len(file_lines)):
+                file_line = file_lines[i]
+                splits = file_line.split("\t")
+                for j in range(len(splits)):
+                    split = splits[j]
+                    if j in indexes:
+                        sheet.write(length, indexes[j], split)
+                for j in range(len(item_list)):
+                    sheet.write(length, len(indexes) + j, item_list[j][1])
+                length = length + 1
+            add_sheet["length"] = length
     work_book.save(excel_path)
