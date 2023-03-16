@@ -8,7 +8,7 @@ from re import Pattern
 import demjson
 
 PATTERN_REPLACE_PATTERNS = [
-    [re.compile("at com\\.sun\\.proxy\\.\\$Proxy\\d+\\."), r'com.sun.proxy.\\$Proxy\\d+.'],
+    [re.compile("com\\.sun\\.proxy\\.\\$Proxy\\d+\\."), r'com.sun.proxy.$Proxy\\d+.'],
     [re.compile("sun\\.reflect\\.GeneratedMethodAccessor\\d+\\.invoke"), r'sun.reflect.GeneratedMethodAccessor\\d+.invoke'],
     [re.compile("\\.java:\\d+\\)"), r'.java:\\d+)']
 ]
@@ -163,7 +163,7 @@ if __name__ == '__main__':
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
-    line_pattern_str = r"(?P<time>\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\])"
+    line_pattern_str = r"(?P<time>\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}( [-+]\d+)?\])"
     count_pattern_str = r"(?P<ip>\d+.\d+.\d+.\d+)\t(?P<count>\d+)\t(?P<time>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\t"
     message_batch_list = read_path_message_batch(args.input_path, line_pattern_str, count_pattern_str)
     pattern_batch_list = read_path_message_batch(args.pattern_path, "", "", r"warn_pattern\d+\.txt")
