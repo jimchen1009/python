@@ -51,6 +51,7 @@ def read_path_message_batch(input_path: str, line_pattern_str: str, count_patter
             continue
         file_path = str.format("{}\\{}", input_path, input_filename)
         if os.path.isdir(file_path):
+            message_batch_list.extend(read_path_message_batch(file_path, line_pattern_str, count_pattern_str, name_like))
             continue
         line_batch_list0 = read_file_line_batch(file_path, line_pattern_str, count_pattern_str)
         for line_batch0 in line_batch_list0:
