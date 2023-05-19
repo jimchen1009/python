@@ -221,8 +221,8 @@ if __name__ == '__main__':
     current_time_str = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")
     title = "操作:【{}】, 时间:【{}】, 报错匹配:【{}】, 忽略:【{}】, 模板总数:【{}】, 检测数量:【{}】".format(user_name, current_time_str, len(warn_pattern_list), len(ignore_message_batch_list), pattern_count, args.filter_count)
     # cur 脚本发送文件是中文,后缀名被自动去掉了, 所以忽略
-    write_message_with_title(output_path, "warn.log", title, message_list)
-    write_message_with_title(output_path, "other.log", title, other_message_batch_list)
+    write_message_with_title(output_path, "warn.txt", title, message_list)
+    write_message_with_title(output_path, "other.txt", title, other_message_batch_list)
     # write_message_with_title(output_path, "模板报错.txt", title, message_list)
     # write_message_with_title(output_path, "忽略报错.txt", title, ignore_message_batch_list)
     # write_message_with_title(output_path, "其他报错.txt", title, other_message_batch_list)
