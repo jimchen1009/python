@@ -3,7 +3,7 @@ import json
 import requests
 
 sonar_url = "http://10.17.2.69:9000/api/"
-sonar_auth = ("", "")
+sonar_auth = ("7e2cd1c883efe53ea0842ee60d8804d24c3372da", "")
 
 
 def notify_sonar_bug():
@@ -13,25 +13,24 @@ def notify_sonar_bug():
         author = author_issues["author"]
         bug_count = author_issues["bug_count"]
         project_issues_map = author_issues["project_issues_map"]
-        webhook_content = "**用户【" + author + "】未解决BUG数量 <font color=\"warning\">" + str(bug_count) + "</font> 个**\n"
+        webhook_title = "用户【" + author + "】未解决BUG数量" + str(bug_count) + "个\n"
+        webhook_content = ""
         for project, project_issues in project_issues_map.items():
-            webhook_content += " >项目 [" + project + "] 数量\n"
+            webhook_content += "项目 [" + project + "] 数量\n"
             for severity, count in project_issues.items():
-                webhook_content += " > <font color=\"info\">" + severity + "</font> = <font color=\"warning\">" + str(
-                    count) + "</font>\n"
+                webhook_content += "<font color=\"green\">" + severity + "</font> = <font color=\"red\">" + str(count) + "</font>\n"
         mentioned_list = []
         if bug_count > 0:
             mentioned_list.append(author)
             webhook_content += "sonar地址：[点击跳转](http://10.17.2.69:9000/projects)"
-        webhook_data_list.append({"content": webhook_content, "mentioned_list": mentioned_list, "bug_count": bug_count})
+        webhook_data_list.append({"content": webhook_content, "mentioned_list": mentioned_list, "bug_count": bug_count, "webhook_title": webhook_title})
     for webhook_data in webhook_data_list:
         webhook_content = webhook_data["content"]
-        mentioned_list = webhook_data["mentioned_list"]
-        webhook_params = {"msgtype": "markdown",
-                          "markdown": {"content": webhook_content, "mentioned_list": mentioned_list}}
+        webhook_title = webhook_data["webhook_title"]
+        webhook_params = markdown_webhook_message(webhook_title, webhook_content)
         headers = {'content-type': 'application/json'}
         response = requests.post(
-            url="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=3b26de32-5b08-496e-9d6c-9e9214065f77",
+            url="https://open.feishu.cn/open-apis/bot/v2/hook/ab105da7-2cd3-444c-94ec-f6b8ecf55139",
             headers=headers,
             data=json.dumps(webhook_params).encode('utf-8'))
         print(response.status_code, end="\n")
@@ -80,5 +79,30 @@ def request_author_user(author: str):
     return {"author": author, "bug_count": bug_count, "project_issues_map": project_issues_map}
 
 
+def markdown_webhook_message(title: str, content: str) -> str:
+    markdown = {
+        "msg_type": "interactive",
+        "card": {
+            "config": {
+                "wide_screen_mode": True
+            },
+            "header": {
+                "template": "green",
+                "title": {
+                    "content": title,
+                    "tag": "plain_text"
+                }
+            },
+            "elements": [
+                {
+                    "tag": "markdown",
+                    "content": content
+                }
+            ]
+        }
+    }
+    return markdown
+
+
 if __name__ == '__main__':
-    request_project_issues()
+    notify_sonar_bug()

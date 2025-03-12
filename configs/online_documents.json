@@ -15,7 +15,8 @@
 		"typeId": 2,
 		"title":  ["id", "name", "icon", "desc", "recover_time", "recover_num", "recover_limit", "max_limit", "expiredTime"],
 		"sheetname": "export_currency",
-		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/item.xlsx"
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/item.xlsx",
+		"seconds": 5
 	},
 	"食魂id(程序)": {
 		"typeId": 2,
@@ -27,7 +28,8 @@
 		"typeId": 2,
 		"title":  ["barrierId", "title", "cost"],
 		"sheetname": "export_关卡配置",
-		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/fb.xlsx"
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/fb.xlsx",
+		"seconds": 5
 	},
 	"活动bossID(程序)": {
 		"typeId": 2,
@@ -45,7 +47,8 @@
 		"typeId": 2,
 		"title":  ["barrierId", "title", "cost"],
 		"sheetname": "export_活动关卡",
-		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/fbActivity.xlsx"
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/fbActivity.xlsx",
+		"seconds": 10
 	},
 	"BP任务": {
 		"typeId": 2,
@@ -63,7 +66,8 @@
 		"typeId": 2,
 		"title":  ["id", "name", "typeId", "typeName", "openState", "startTime", "endTime"],
 		"sheetname": "export_活动配置",
-		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/activity.xlsx"
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/activity.xlsx",
+		"seconds": 5
 	},
 	"故事(程序)": {
 		"typeId": 2,
@@ -75,13 +79,15 @@
 		"typeId": 2,
 		"title":  ["id", "main_type", "sub_type", "name", "expiredTime", "canSell", "price", "desc"],
 		"sheetname": "export_item",
-		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/item.xlsx"
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/item.xlsx",
+		"seconds": 5
 	},
 	"直购商品(程序)": {
 		"typeId": 2,
 		"title":  ["id", "name", "comment", "online", "onlineTime", "offlineTime", "amount", "diamond"],
 		"sheetname": "export_充值项",
-		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/topup.xlsx"
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/topup.xlsx",
+		"seconds": 5
 	},
 	"配饰(程序)": {
 		"typeId": 2,
@@ -147,7 +153,8 @@
 		"typeId": 2,
 		"title":  ["id", "name", "comment", "online", "onlineTime", "offlineTime", "originalPrice", "currencyId", "price", "bonus", "tagDesc"],
 		"sheetname": "export_礼包商城",
-		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/topup.xlsx"
+		"filename":  "C:/ProjectG/pjg-product/AExcel/develop/excel/topup.xlsx",
+		"seconds": 5
 	},
 	"膳具ID(程序)": {
 		"typeId": 2,

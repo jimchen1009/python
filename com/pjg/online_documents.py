@@ -3,6 +3,7 @@ import datetime
 import json
 import os
 import re
+import sys
 import time
 
 import pandas
@@ -25,7 +26,7 @@ def clear_and_backup(driver, name: str, directory: str):
     action_send_keys(action, 500, Keys.ARROW_LEFT)
     action_send_keys(action, 500, Keys.ARROW_UP)
     action.key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).perform()
-    action.key_down(Keys.CONTROL).send_keys("c").key_up(Keys.CONTROL).perform()
+    # action.key_down(Keys.CONTROL).send_keys("c").key_up(Keys.CONTROL).perform()
     action.send_keys(Keys.DELETE).perform()
     return action
 
@@ -110,6 +111,7 @@ def generate_date_message():
 
 #国内镜像地址 https://registry.npmmirror.com/binary.html?path=chromedriver/
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='information')
     parser.add_argument('--url', dest="url",
@@ -118,7 +120,7 @@ if __name__ == '__main__':
     parser.add_argument('--qq', dest="qq", default='771129369', type=str, help='QQ账号')
     parser.add_argument('--config', dest="config", default='configs/online_documents.json', type=str, help='配置文件')
     parser.add_argument('--backup_path', dest="backup_path", default='C:/ProjectG/备份/在线文档', type=str, help='备份文件路径')
-    parser.add_argument('--speed', dest="speed", default=2, type=int, help='切换页签的速度(秒)')
+    parser.add_argument('--speed', dest="speed", default=1, type=int, help='切换页签的速度(秒)')
     parser.add_argument('--clipboard', dest="clipboard", default=True, type=bool, help='是否用剪切板模式')
     parser.add_argument('--tabs_only', dest="tabs_only", default="", type=str, help='指定特定的页签')
 
@@ -132,15 +134,15 @@ if __name__ == '__main__':
         driver.get(args.url)
         wait = WebDriverWait(driver, 5)
         driver.maximize_window()
-        driver_find_element(driver, By.ID, "blankpage-button-pc").click()
-        login_tabs = driver_find_element(driver, By.ID, "id-login-tabs")
-        login_tabs.find_element(By.ID, "qq-tabs-title").click()
-        driver.implicitly_wait(2000)
-        login_frame = driver_find_element(driver, By.ID, "login_frame")
-        driver.switch_to.frame(login_frame)
-        driver_find_element(driver, By.ID, "img_" + args.qq).find_element(By.XPATH, "..").click()
-        time.sleep(args.speed)  # 简单处理,每个页签都切换就可以
-        sheet_tabs = driver_find_element(driver, By.ID, "sheetbarContainer").find_elements(By.CLASS_NAME, "sheet-box.sheet.sheet-tab-blur")
+        # driver_find_element(driver, By.ID, "blankpage-button-pc").click()
+        # login_tabs = driver_find_element(driver, By.ID, "id-login-tabs")
+        # login_tabs.find_element(By.ID, "qq-tabs-title").click()
+        # driver.implicitly_wait(2000)
+        # login_frame = driver_find_element(driver, By.ID, "login_frame")
+        # driver.switch_to.frame(login_frame)
+        # driver_find_element(driver, By.ID, "img_" + args.qq).find_element(By.XPATH, "..").click()
+        # time.sleep(args.speed)  # 简单处理,每个页签都切换就可以
+        sheet_tabs = driver_find_element(driver, By.ID, "sheetbarContainer", 60).find_elements(By.CLASS_NAME, "sheet-box.sheet.sheet-tab-blur")
 
         directory = args.backup_path + "/" + datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')
         if not os.path.exists(directory):
@@ -176,6 +178,9 @@ if __name__ == '__main__':
                 sheet_tab_List.insert(0, sheet_tab)
                 continue
             config = main_config[text]
+            seconds = args.speed
+            if "seconds" in config:
+                seconds = config["typeId"]
             clear_and_backup(driver, text, directory)
             typeId = config["typeId"]
             if typeId == 1:
@@ -193,7 +198,6 @@ if __name__ == '__main__':
                 action_send_keys(action, 100, Keys.ARROW_LEFT)
                 action_send_keys(action, 100, Keys.ARROW_UP)
                 action.key_down(Keys.CONTROL).send_keys("v").key_up(Keys.CONTROL).perform()
-                pyperclip.copy("")  # 直接清空剪切板的数据
             else:
                 for match_string in match_strings:
                     length = len(match_string)
@@ -203,6 +207,6 @@ if __name__ == '__main__':
                     action_send_keys(action, 1, Keys.ARROW_DOWN, False)
                     action_send_keys(action, length, Keys.ARROW_LEFT, True)
             print(str.format("页签[{}]完成导出{}行数据!", text, length - 1))
-            time.sleep(args.speed)  # 简单处理,每个页签都切换就可以
+            time.sleep(seconds)  # 简单处理,每个页签都切换就可以
     finally:
         driver.quit()

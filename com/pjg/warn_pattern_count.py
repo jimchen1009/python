@@ -153,10 +153,10 @@ def write_message_with_title(output_path: str, filename: str, title: str, messag
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='information')
-    parser.add_argument('--input_path', dest="input_path", default=r'C:\Users\chenjingjun\Desktop\hippo_warn\decode', type=str, help='输入路径')
+    parser.add_argument('--input_path', dest="input_path", default=r'C:\Users\chenjingjun\Desktop\hippo_warn\download', type=str, help='输入路径')
     parser.add_argument('--output_path', dest="output_path", default=r'C:\Users\chenjingjun\Desktop\hippo_warn\count', type=str, help='输出路径')
     parser.add_argument('--pattern_path', dest="pattern_path", default=r'C:\ProjectG\pjg-server\src\test\resources\tencent', type=str, help='报错模板路径')
-    parser.add_argument('--filter_count', dest="filter_count", default=True, type=bool, help='是否检测报错数量')
+    parser.add_argument('--filter_count', dest="filter_count", default=False, type=bool, help='是否检测报错数量')
     args = parser.parse_args()
 
     user_name = getpass.getuser()
