@@ -1,6 +1,9 @@
 import os
 import re
 import shutil
+import sys
+import argparse
+from typing import Tuple, List, Dict, Any
 
 import pandas as pd
 from openpyxl import load_workbook
@@ -9,10 +12,27 @@ from openpyxl.chart.label import DataLabelList
 from openpyxl.styles import numbers
 from openpyxl.utils import get_column_letter
 
+# 支持命令行参数解析
+def parse_args():
+    parser = argparse.ArgumentParser(description='协议分析工具')
+    parser.add_argument('--input_csv', type=str, 
+                      default=os.path.join(os.path.dirname(__file__), 'E:\\chrome\\每小时CMD数量.csv'),
+                      help='协议统计原始数据CSV文件路径')
+    parser.add_argument('--input_txt', type=str, 
+                      default=os.path.join(os.path.dirname(__file__), 'C:\\Users\\chenjingjun\\Desktop\\协议说明.txt'),
+                      help='协议业务说明TXT文件路径')
+    parser.add_argument('--output', type=str, 
+                      default=os.path.join(os.path.dirname(__file__), 'C:\\Users\\chenjingjun\\Desktop\\协议分析报告.xlsx'),
+                      help='输出Excel文件路径')
+    return parser.parse_args()
+
+# 获取命令行参数
+args = parse_args()
+
 # 文件路径配置
-input_csv_path = 'E:/chrome/每分钟事件次数-data-as-joinbyfield-2025-03-13 11_24_12.csv'  # 协议统计原始数据
-input_txt_path = 'C:/Users/chenjingjun/Desktop/协议说明.txt'  # 协议业务说明
-output_path = 'C:/Users/chenjingjun/Desktop/协议分析报告.xlsx'
+input_csv_path = args.input_csv  # 协议统计原始数据
+input_txt_path = args.input_txt  # 协议业务说明
+output_path = args.output  # 输出文件路径
 
 
 def load_data():
@@ -34,7 +54,7 @@ def load_data():
         parse_dates=['Time'],  # 自动解析时间列
         thousands=',',  # 处理千分位分隔符
         encoding='utf-8',  # 根据实际编码调整
-        skiprows=1  # 跳过第一行
+        skiprows=0  # 跳过第一行
     )
 
     # # 从TXT加载协议说明（格式：协议,业务说明）
@@ -88,8 +108,16 @@ def process_data(df, tasks_df):
     merged_df = pd.merge(totals_df, tasks_df, on='协议', how='outer')
     merged_df['总数'].fillna(0, inplace=True)
 
+    # 定义一个函数来处理切割逻辑
+    def custom_split(protocol):
+        if protocol.startswith('sys/CustomTask'):
+            # 如果以 sys/CustomTask 开头，切割成 CustomTask 和 UCtx
+            return protocol.replace('sys/', '').split('/', 1)
+        else:
+            # 否则按原来的方式切割
+            return protocol.split('/', 1)
     # 拆分协议字段
-    merged_df[['ext', 'cmd']] = merged_df['协议'].str.split('/', expand=True)
+    merged_df[['ext', 'cmd']] = merged_df['协议'].apply(custom_split).apply(pd.Series)
 
     #
     merged_df['ext'] = pd.to_numeric(merged_df['ext'], errors='coerce')
@@ -213,7 +241,7 @@ def add_excel_formulas(ws):
 
     # 添加百分比公式
     for row in range(2, max_row + 1):
-        ws[f'C{row}'] = f'=B{row}/$B${max_row + 1}'
+        ws[f'C{row}'] = f'=B{row}/B{max_row + 1}'
         ws[f'C{row}'].number_format = numbers.FORMAT_PERCENTAGE_00
 
     # 添加总和行
@@ -227,16 +255,15 @@ def add_excel_formulas(ws):
 
     # 添加图表（仅在有效数据存在时）
     if max_row > 2:  # 标题行+至少1行数据
-        max_data_row = max_row - 1  # 排除总计行
 
         # === 柱形图 ===
         bar = BarChart()
         bar.title = "协议数量（总数）"
         # 数据范围：A列协议，B列总数
-        data = Reference(ws, min_col=2, min_row=2, max_row=max_data_row)
+        data = Reference(ws, min_col=2, min_row=1, max_row=max_row)
         bar.add_data(data, titles_from_data=True)
         # 数据范围：A列协议，B列总数
-        labels = Reference(ws, min_col=1, min_row=2, max_row=max_data_row)
+        labels = Reference(ws, min_col=1, min_row=2, max_row=max_row)
         bar.set_categories(labels)
         bar.varyColors = False  # 使用单一颜色
         bar.series[0].graphicalProperties.solidFill = "4472C4"  # 标准蓝色
@@ -258,10 +285,10 @@ def add_excel_formulas(ws):
         pie = PieChart()
         pie.title = "协议分布（百分比）"
 
-        data = Reference(ws, min_col=3, min_row=2, max_row=max_data_row)
+        data = Reference(ws, min_col=3, min_row=1, max_row=max_row)
         pie.add_data(data, titles_from_data=True)
         # 数据范围：A列协议，C列百分比
-        labels = Reference(ws, min_col=1, min_row=3, max_row=max_data_row)
+        labels = Reference(ws, min_col=1, min_row=2, max_row=max_row)
         pie.set_categories(labels)
         # 设置数据标签显示百分比
         pie.dataLabels = DataLabelList()
@@ -282,10 +309,13 @@ def main():
         raise ValueError("任务表需要包含两列：协议和业务说明")
     tasks_df.columns = ['协议', '业务说明']
 
-    # 处理时间格式
-    raw_df['Time'] = pd.to_datetime(raw_df['Time'],
-                                    format='%m/%d/%Y, %I:%M:%S %p',
-                                    errors='coerce')
+    # 尝试第一种格式
+    # raw_df['Time'] = pd.to_datetime(raw_df['Time'], format='%m/%d/%Y, %I:%M:%S %p', errors='raise')
+    # 如果第一种格式失败，尝试第二种格式
+    raw_df['Time'] = pd.to_datetime(raw_df['Time'], format='%Y-%m-%d %H:%M:%S', errors='raise')
+    # 检查是否有 NaT 值
+    if raw_df['Time'].isnull().any():
+        print("存在无法解析的日期，已被转换为 NaT。")
 
     # 过滤无效时间
     raw_df = raw_df.dropna(subset=['Time'])
